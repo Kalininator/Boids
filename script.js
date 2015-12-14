@@ -2,7 +2,7 @@ var c, ctx;
 var WIDTH, HEIGHT;
 var swarm;
 
-var MIN_DISTANCE = 10;
+var MIN_DISTANCE = 15;
 var VIEW_DISTANCE = 50;
 var MAX_SPEED = 2.5;
 
@@ -14,7 +14,6 @@ $(function(){//init
 	c.height = window.innerHeight;
 	WIDTH = c.width;
 	HEIGHT = c.height;
-	$("#canvas").css("border","1px solid black");
 	
 	swarm = new swarm();
 	for(var i = 0; i < 120; i ++)
