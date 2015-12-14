@@ -1,13 +1,14 @@
 var c, ctx;
-var WIDTH = 800;
-var HEIGHT = 600;
+var WIDTH, HEIGHT;
 var swarm;
 $(function(){//init
 	
 	c = $("#canvas")[0];
 	ctx = c.getContext("2d");
-	c.width = WIDTH;
-	c.height = HEIGHT;
+	c.width = window.innerWidth;
+	c.height = window.innerHeight;
+	WIDTH = c.width;
+	HEIGHT = c.height;
 	$("#canvas").css("border","1px solid black");
 	
 	swarm = new swarm();
