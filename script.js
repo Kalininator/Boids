@@ -74,6 +74,7 @@ boid.prototype = {
 		ctx.rect(this.position.x-3,this.position.y-3,6,6);
 		ctx.closePath();
 		ctx.fill();
+		drawVec(this.velocity.multiply(5),this.position);
 	},
 	equals: function(boid)
 	{
@@ -85,6 +86,7 @@ boid.prototype = {
 		this.velocity = this.velocity.add(this.rule2());
 		this.velocity = this.velocity.add(this.rule3());
 		this.velocity = this.velocity.add(this.boundPosition());
+		this.velocity = this.limitSpeed(2);
 		this.position = this.position.add(this.velocity);
 	},
 	rule1: function()
@@ -146,16 +148,25 @@ boid.prototype = {
 		}
 		
 		return vec;
+	},
+	limitSpeed: function(max)
+	{
+		if(this.velocity.length() > max)
+		{
+			return this.velocity.setLength(max);
+		}else{
+			return this.velocity;
+		}
 	}
 	
 }
 
-function drawVec(v)
+function drawVec(v, pos)
 {
 	
 	ctx.beginPath();
-	ctx.moveTo(WIDTH/2,HEIGHT/2);
-	ctx.lineTo((WIDTH/2)+v.x,(HEIGHT/2)+v.y);
+	ctx.moveTo(pos.x,pos.y);
+	ctx.lineTo((pos.x)+v.x,(pos.y)+v.y);
 	ctx.stroke();
 	ctx.closePath();
 }

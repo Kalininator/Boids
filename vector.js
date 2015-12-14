@@ -72,6 +72,14 @@ vec2.prototype = {
 	rotate: function(theta)
 	{
 		return this.setAngle(this.angle()+theta);
+	},
+	setLength: function(length)
+	{
+		return this.divide(this.length()).multiply(length);
+	},
+	unit: function()
+	{
+		return this.setLength(1);
 	}
 	
 }
