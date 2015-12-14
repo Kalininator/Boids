@@ -10,12 +10,19 @@ $(function(){//init
 	c.height = HEIGHT;
 	$("#canvas").css("border","1px solid black");
 	
-	swarm = new swarm(10);
-	swarm.addBoid(new boid(new vec2(WIDTH/2,HEIGHT/2),new vec2(0,0), swarm));
-	swarm.addBoid(new boid(new vec2(WIDTH/2 -50,HEIGHT/2),new vec2(0,0), swarm));
-	swarm.addBoid(new boid(new vec2(WIDTH/2 +50,HEIGHT/2 - 100),new vec2(0,0), swarm));
-	swarm.addBoid(new boid(new vec2(WIDTH/2 +50,HEIGHT/2 - 300),new vec2(0,0), swarm));
-	swarm.addBoid(new boid(new vec2(WIDTH/2 +50,HEIGHT/2 + 100),new vec2(0,0), swarm));
+	swarm = new swarm();
+	for(var i = 0; i < 10; i ++)
+	{
+		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(0,0), swarm));
+	}
+	swarm.setTarget(new vec2(WIDTH/2, HEIGHT/2));
+	
+	c.addEventListener('mousemove', function(evt) {
+        var mousePos = getMousePos(c, evt);
+		//console.log(mousePos.x + "," + mousePos.y);
+		swarm.setTarget(new vec2(mousePos.x,mousePos.y));
+    }, false);
+	
 	setInterval(loop, 1000/60);
 });
 
@@ -26,139 +33,12 @@ function loop()
 	swarm.update();
 }
 
-function swarm()
-{
-	this.boids = [];
-}
-swarm.prototype = {
-	
-	addBoid: function(boid){
-		this.boids[this.boids.length] = boid;
-	},
-	draw: function()
-	{
-		for(i = 0; i < this.boids.length; i++)
-		{
-			this.boids[i].draw();
-		}
-	},
-	update: function()
-	{
-		for (var i = 0; i < this.boids.length; i ++)
-		{
-			this.boids[i].update();
-		}
-	},
-	getCofM: function()
-	{
-		var pos = new vec2(0,0);
-		for(i = 0; i < this.boids.length; i ++)
-		{
-			pos = pos.add(this.boids[i].position);
-		}
-		return pos.divide(this.boids.length);
-	}
-}
-
-function boid(position,velocity, swarm)
-{
-	this.position = position;
-	this.velocity = velocity;
-	this.swarm = swarm;
-}
-boid.prototype = {
-	
-	draw: function()
-	{
-		ctx.beginPath();
-		ctx.rect(this.position.x-3,this.position.y-3,6,6);
-		ctx.closePath();
-		ctx.fill();
-		drawVec(this.velocity.multiply(5),this.position);
-	},
-	equals: function(boid)
-	{
-		return this.position.equals(boid.position) && this.velocity.equals(boid.velocity);
-	},
-	update: function()
-	{
-		this.velocity = this.velocity.add(this.rule1());
-		this.velocity = this.velocity.add(this.rule2());
-		this.velocity = this.velocity.add(this.rule3());
-		this.velocity = this.velocity.add(this.boundPosition());
-		this.velocity = this.limitSpeed(2);
-		this.position = this.position.add(this.velocity);
-	},
-	rule1: function()
-	{
-		var cofm = this.swarm.getCofM();
-		return cofm.subtract(this.position).divide(100);
-	},
-	rule2: function()
-	{
-		var v = new vec2(0,0);
-		for(var i = 0; i < this.swarm.boids.length; i ++)
-		{
-			if(!this.swarm.boids[i].equals(this))
-			{
-				if(this.swarm.boids[i].position.subtract(this.position).length() < 20)
-				{
-					v = v.subtract(this.swarm.boids[i].position.subtract(this.position).divide(20));
-				}
-			}
-		}
-		return v;
-	},
-	rule3: function()
-	{
-		var vec = new vec2(0,0);
-		for(var i = 0; i < this.swarm.boids.length; i ++)
-		{
-			if(!this.swarm.boids[i].equals(this))
-			{
-				vec = vec.add(this.swarm.boids[i].velocity);
-			}
-		}
-		vec = vec.divide(this.swarm.boids.length);
-		return vec.subtract(this.velocity).divide(8);
-	},
-	boundPosition: function()
-	{
-		var xmin = 0;
-		var xmax = WIDTH;
-		var ymin = 0;
-		var ymax = HEIGHT;
-		var c = 0.5;
-		var vec = new vec2(0,0);
-		
-		if(this.position.x < xmin)
-		{
-			vec.x = c;
-		}else if(this.position.x > xmax)
-		{
-			vec.x = -c;
-		}
-		
-		if(this.position.y < ymin)
-		{
-			vec.y = c;
-		}else if(this.position.y > ymax)
-		{
-			vec.y = -c;
-		}
-		
-		return vec;
-	},
-	limitSpeed: function(max)
-	{
-		if(this.velocity.length() > max)
-		{
-			return this.velocity.setLength(max);
-		}else{
-			return this.velocity;
-		}
-	}
-	
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
 }
 
 function drawVec(v, pos)
