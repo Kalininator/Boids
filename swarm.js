@@ -28,5 +28,17 @@ swarm.prototype = {
 	removeTarget: function()
 	{
 		this.target = null;
+	},
+	getBoidsInSight: function(boid)
+	{
+		var output = [];
+		for(var i = 0; i < this.boids.length; i ++)
+		{
+			if(boid.canSee(this.boids[i]) && (!boid.equals(this.boids[i])))
+			{
+				output[output.length] = this.boids[i];
+			}
+		}
+		return output;
 	}
 }

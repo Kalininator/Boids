@@ -1,6 +1,10 @@
 var c, ctx;
 var WIDTH, HEIGHT;
 var swarm;
+
+var MIN_DISTANCE = 30;
+var VIEW_DISTANCE = 400;
+
 $(function(){//init
 	
 	c = $("#canvas")[0];
@@ -12,13 +16,13 @@ $(function(){//init
 	$("#canvas").css("border","1px solid black");
 	
 	swarm = new swarm();
-	for(var i = 0; i < 10; i ++)
+	for(var i = 0; i < 30; i ++)
 	{
 		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(0,0), swarm));
 	}
-	swarm.setTarget(new vec2(WIDTH/2, HEIGHT/2));
+	//swarm.setTarget(new vec2(WIDTH/2, HEIGHT/2));
 	
-	c.addEventListener('mousemove', function(evt) {
+	c.addEventListener('click', function(evt) {
         var mousePos = getMousePos(c, evt);
 		//console.log(mousePos.x + "," + mousePos.y);
 		swarm.setTarget(new vec2(mousePos.x,mousePos.y));

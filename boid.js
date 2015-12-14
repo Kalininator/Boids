@@ -30,27 +30,26 @@ boid.prototype = {
 	},
 	rule1: function() //move towards the center of mass
 	{
+		//get all boids in sight
+		var insight = this.swarm.getBoidsInSight(this);
 		var cofm = new vec2(0,0);
-		for(var i = 0; i < this.swarm.boids.length; i ++)
+		for(var i = 0; i < insight.length; i ++)
 		{
-			if(!this.swarm.boids[i].equals(this))
-			{
-				cofm = cofm.add(this.swarm.boids[i].position);
-			}
+			cofm = cofm.add(insight[i].position);
 		}
-		cofm = cofm.divide(this.swarm.boids.length);
-		return cofm.subtract(this.position).divide(100);
+		cofm = cofm.divide(insight.length);
+		return cofm.subtract(this.position).divide(300);
 	},
 	rule2: function()//avoid collisions
 	{
 		var v = new vec2(0,0);
 		for(var i = 0; i < this.swarm.boids.length; i ++)
 		{
-			if(!this.swarm.boids[i].equals(this))
+			if((!this.swarm.boids[i].equals(this)) && this.canSee(this.swarm.boids[i]))
 			{
-				if(this.swarm.boids[i].position.subtract(this.position).length() < 20)
+				if(this.swarm.boids[i].position.subtract(this.position).length() < MIN_DISTANCE)
 				{
-					v = v.subtract(this.swarm.boids[i].position.subtract(this.position).divide(20));
+					v = v.subtract(this.swarm.boids[i].position.subtract(this.position).divide(2));
 				}
 			}
 		}
@@ -58,16 +57,14 @@ boid.prototype = {
 	},
 	rule3: function()//aim towards the average velocity
 	{
+		var insight = this.swarm.getBoidsInSight(this);
 		var vec = new vec2(0,0);
-		for(var i = 0; i < this.swarm.boids.length; i ++)
+		for(var i = 0; i < insight.length; i ++)
 		{
-			if(!this.swarm.boids[i].equals(this))
-			{
-				vec = vec.add(this.swarm.boids[i].velocity);
-			}
+			vec = vec.add(insight[i].velocity);
 		}
-		vec = vec.divide(this.swarm.boids.length);
-		return vec.subtract(this.velocity).divide(8);
+		vec = vec.divide(insight.length);
+		return vec.subtract(this.velocity).divide(16);
 	},
 	rule4: function()//aim towards target if one exists
 	{
@@ -116,6 +113,10 @@ boid.prototype = {
 		}else{
 			return this.velocity;
 		}
+	},
+	canSee: function(boid)
+	{
+		return this.position.subtract(boid.position).length() < VIEW_DISTANCE;
 	}
 	
 }
