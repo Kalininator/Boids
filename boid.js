@@ -12,7 +12,7 @@ boid.prototype = {
 		ctx.rect(this.position.x-3,this.position.y-3,6,6);
 		ctx.closePath();
 		ctx.fill();
-		drawVec(this.velocity.multiply(5),this.position);
+		drawVec(this.velocity.multiply(3),this.position);
 	},
 	equals: function(boid)
 	{
@@ -25,7 +25,7 @@ boid.prototype = {
 		this.velocity = this.velocity.add(this.rule3());
 		this.velocity = this.velocity.add(this.rule4());
 		this.velocity = this.velocity.add(this.boundPosition());
-		this.velocity = this.limitSpeed(3);
+		this.velocity = this.limitSpeed(MAX_SPEED);
 		this.position = this.position.add(this.velocity);
 	},
 	rule1: function() //move towards the center of mass

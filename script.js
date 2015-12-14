@@ -2,8 +2,9 @@ var c, ctx;
 var WIDTH, HEIGHT;
 var swarm;
 
-var MIN_DISTANCE = 30;
-var VIEW_DISTANCE = 400;
+var MIN_DISTANCE = 10;
+var VIEW_DISTANCE = 50;
+var MAX_SPEED = 2.5;
 
 $(function(){//init
 	
@@ -16,7 +17,7 @@ $(function(){//init
 	$("#canvas").css("border","1px solid black");
 	
 	swarm = new swarm();
-	for(var i = 0; i < 30; i ++)
+	for(var i = 0; i < 120; i ++)
 	{
 		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(0,0), swarm));
 	}
