@@ -16,7 +16,7 @@ $(function(){//init
 	HEIGHT = c.height;
 	
 	swarm = new swarm();
-	for(var i = 0; i < 120; i ++)
+	for(var i = 0; i < 100; i ++)
 	{
 		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(0,0), swarm));
 	}

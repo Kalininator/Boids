@@ -8,11 +8,21 @@ boid.prototype = {
 	
 	draw: function()
 	{
-		ctx.beginPath();
+		/*ctx.beginPath();
 		ctx.rect(this.position.x-3,this.position.y-3,6,6);
 		ctx.closePath();
 		ctx.fill();
-		drawVec(this.velocity.multiply(3),this.position);
+		drawVec(this.velocity.multiply(3),this.position);*/
+		var tip = this.position.add(this.velocity.setLength(8));
+		var left = this.position.add(this.velocity.setLength(6).setAngle(this.velocity.angle()-(Math.PI * 0.75)));
+		var right = this.position.add(this.velocity.setLength(6).setAngle(this.velocity.angle()-(Math.PI + 0.75)));
+		ctx.beginPath();
+			ctx.moveTo(tip.x,tip.y);
+			ctx.lineTo(left.x,left.y);
+			ctx.lineTo(this.position.x,this.position.y);
+			ctx.lineTo(right.x,right.y);
+		ctx.closePath();
+		ctx.fill();
 	},
 	equals: function(boid)
 	{
