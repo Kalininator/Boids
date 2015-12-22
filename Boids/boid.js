@@ -42,13 +42,19 @@ boid.prototype = {
 	{
 		//get all boids in sight
 		var insight = this.swarm.getBoidsInSight(this);
+		
+		if(insight.length == 0)
+		{
+			return new vec2(0,0);
+		}
+		
 		var cofm = new vec2(0,0);
 		for(var i = 0; i < insight.length; i ++)
 		{
 			cofm = cofm.add(insight[i].position);
 		}
 		cofm = cofm.divide(insight.length);
-		return cofm.subtract(this.position).divide(300);
+		return cofm.subtract(this.position).divide(500);
 	},
 	rule2: function()//avoid collisions
 	{
@@ -68,6 +74,12 @@ boid.prototype = {
 	rule3: function()//aim towards the average velocity
 	{
 		var insight = this.swarm.getBoidsInSight(this);
+		
+		if(insight.length == 0)
+		{
+			return new vec2(0,0);
+		}
+		
 		var vec = new vec2(0,0);
 		for(var i = 0; i < insight.length; i ++)
 		{
@@ -82,7 +94,7 @@ boid.prototype = {
 		{
 			var target = this.swarm.target;
 			
-			return target.subtract(this.position).divide(100);
+			return target.subtract(this.position).divide(500);
 			
 		}else{
 			return new vec2(0,0);

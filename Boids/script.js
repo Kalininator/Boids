@@ -3,7 +3,7 @@ var WIDTH, HEIGHT;
 var swarm;
 
 var MIN_DISTANCE = 15;
-var VIEW_DISTANCE = 50;
+var VIEW_DISTANCE = 100;
 var MAX_SPEED = 2.5;
 
 $(function(){//init
@@ -16,9 +16,9 @@ $(function(){//init
 	HEIGHT = c.height;
 	
 	swarm = new swarm();
-	for(var i = 0; i < 100; i ++)
+	for(var i = 0; i < 200; i ++)
 	{
-		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(0,0), swarm));
+		swarm.addBoid(new boid(new vec2(Math.random()*WIDTH,Math.random()*HEIGHT),new vec2(getRandom(-1,1),getRandom(-1,1)), swarm));
 	}
 	//swarm.setTarget(new vec2(WIDTH/2, HEIGHT/2));
 	
@@ -30,6 +30,10 @@ $(function(){//init
 	
 	setInterval(loop, 1000/60);
 });
+
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
 function loop()
 {
