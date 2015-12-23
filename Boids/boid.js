@@ -61,15 +61,22 @@ boid.prototype = {
 		var v = new vec2(0,0);
 		var insight = getObstacles(this);
 		
-		if(insight.length == 0)
+		if(insight.walls.length + insight.boids.length == 0)
 		{
 			return v;
 		}
-		for(var i = 0; i < insight.length; i ++)
+		for(var i = 0; i < insight.boids.length; i ++)
 		{
-			if(insight[i].subtract(this.position).length() < MIN_DISTANCE)
+			if(insight.boids[i].subtract(this.position).length() < MIN_DISTANCE)
 			{
-				v = v.subtract(insight[i].subtract(this.position).divide(2));
+				v = v.subtract(insight.boids[i].subtract(this.position).divide(1));
+			}
+		}
+		for(var i = 0; i < insight.walls.length; i ++)
+		{
+			if(insight.walls[i].subtract(this.position).length() < MIN_WALL_DISTANCE)
+			{
+				v = v.subtract(insight.walls[i].subtract(this.position).divide(1));
 			}
 		}
 		return v;
@@ -141,7 +148,29 @@ boid.prototype = {
 	},
 	canSee: function(boid)
 	{
-		return this.position.subtract(boid.position).length() < VIEW_DISTANCE;
+		var inRange = this.position.subtract(boid.position).length() < VIEW_DISTANCE;
+		
+		var throughwall = false;
+		
+		for(var i = 0; i < walls.length; i ++)
+		{
+			if(line_intersects(this.position.x,this.position.y,boid.position.x,boid.position.y,walls[i].start.x,walls[i].start.y,walls[i].end.x,walls[i].end.y))
+			{
+				throughwall = true;
+			}
+		}
+		
+		return inRange && !throughwall;
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
