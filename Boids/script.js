@@ -4,7 +4,7 @@ var swarm, walls;
 
 var MIN_DISTANCE = 20;
 var MIN_WALL_DISTANCE = 25;
-var VIEW_DISTANCE = 100;
+var VIEW_DISTANCE = 500;
 var MAX_SPEED = 2.5;
 
 $(function(){//init

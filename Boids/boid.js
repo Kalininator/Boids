@@ -103,8 +103,13 @@ boid.prototype = {
 		if(this.swarm.target != null)
 		{
 			var target = this.swarm.target;
+			if(this.canSee(new boid(target,new vec2(0,0)),true))
+			{
+				return target.subtract(this.position).divide(500);
+			}else{
+				return new vec2(0,0);
+			}
 			
-			return target.subtract(this.position).divide(500);
 			
 		}else{
 			return new vec2(0,0);
@@ -146,10 +151,11 @@ boid.prototype = {
 			return this.velocity;
 		}
 	},
-	canSee: function(boid)
+	canSee: function(boid, rangeUsed)
 	{
 		var inRange = this.position.subtract(boid.position).length() < VIEW_DISTANCE;
 		
+		rangeUsed = rangeUsed == null ? false : rangeUsed;
 		var throughwall = false;
 		
 		for(var i = 0; i < walls.length; i ++)
@@ -160,7 +166,7 @@ boid.prototype = {
 			}
 		}
 		
-		return inRange && !throughwall;
+		return (rangeUsed ? true : inRange) && !throughwall;
 	}
 	
 }
