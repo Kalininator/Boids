@@ -59,14 +59,17 @@ boid.prototype = {
 	rule2: function()//avoid collisions
 	{
 		var v = new vec2(0,0);
-		for(var i = 0; i < this.swarm.boids.length; i ++)
+		var insight = getObstacles(this);
+		
+		if(insight.length == 0)
 		{
-			if((!this.swarm.boids[i].equals(this)) && this.canSee(this.swarm.boids[i]))
+			return v;
+		}
+		for(var i = 0; i < insight.length; i ++)
+		{
+			if(insight[i].subtract(this.position).length() < MIN_DISTANCE)
 			{
-				if(this.swarm.boids[i].position.subtract(this.position).length() < MIN_DISTANCE)
-				{
-					v = v.subtract(this.swarm.boids[i].position.subtract(this.position).divide(2));
-				}
+				v = v.subtract(insight[i].subtract(this.position).divide(2));
 			}
 		}
 		return v;

@@ -40,5 +40,24 @@ swarm.prototype = {
 			}
 		}
 		return output;
+	},
+	getObstaclesInSight: function(boid)
+	{
+		var output = [];
+		var all = getObstacles();
+		
+		for(var i = 0; i < all.length; i ++)
+		{
+			
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
